@@ -1,0 +1,39 @@
+.display-parent{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 50px;
+    gap: 40px;
+}
+
+.display-child{
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0;
+    border: 2px solid black;
+    width: auto;
+    background-color: cornsilk;     
+    border-radius: 8px;
+    font-size: 20px;
+    font-weight: 550;
+}
+p{
+    display: flex;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    padding: 0 100px;
+}
+strong{
+    padding-right: 5px;
+}
+
+a {
+    font-weight: 600;
+    font-size: 22px;
+    color: black;
+    text-decoration: inherit;
+}
+a:hover {
+    color: black;
+}

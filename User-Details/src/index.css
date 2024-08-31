@@ -1,0 +1,15 @@
+:root {
+  line-height: 1.5;
+  font-weight: 400;
+  color: black;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: black;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #f6f6f8;
+  }
+}

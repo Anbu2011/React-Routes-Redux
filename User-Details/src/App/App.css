@@ -1,0 +1,23 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  min-width: 320px;
+  min-height: 100vh;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 18px;
+  color: black;
+  
+  background: #800080;  
+  background: -webkit-linear-gradient(to right, #ffc0cb, #800080);  
+  background: linear-gradient(to right, #ffc0cb, #800080);
+}
+
+
+
