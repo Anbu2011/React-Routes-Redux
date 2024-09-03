@@ -1,17 +1,26 @@
 import './UserInformationDisplay.css'
-import {Link, useParams, useNavigate} from "react-router-dom"
-import { useSelector } from "react-redux"
-import { selectUsers } from '../../slice/userSlice.jsx';
-import ErrorRoute from '../ErrorRoute/ErrorRoute.jsx';  
+import { useEffect } from 'react';
+import {Link, useParams} from "react-router-dom"
+import { useSelector , useDispatch } from "react-redux"
+import { getUsers } from '../../slice/userSlice.jsx';
+import ErrorRoute from '../ErrorRoute/ErrorRoute.jsx';
 
 const UserInformationDisplay = () => {
-  
-  const users = useSelector(selectUsers)
+  const dispatch = useDispatch();
+  const {usersArray, loading} = useSelector((state) => state.usersInfo)
+
+  useEffect(() =>{
+    if(usersArray.length === 0){
+      dispatch(getUsers())
+    }
+  },[dispatch,usersArray]);
+
+  if(loading){
+    return <p>Loading...</p>
+  }
+
   const {userId} = useParams();
-  const navigate = useNavigate();
-
-
-  const specificUser = users.find((eachUser)=>{
+  const specificUser = usersArray.find((eachUser)=>{
     if(eachUser.id === Number(userId)){
       return eachUser
     }
@@ -20,7 +29,7 @@ const UserInformationDisplay = () => {
   if (!specificUser) {
     return <ErrorRoute />; 
   }
-
+  
   return (
     <>
       
@@ -30,8 +39,8 @@ const UserInformationDisplay = () => {
             <p><strong>ID : </strong>{specificUser.id}</p>
             <p><strong>Name : </strong>{specificUser.name}</p>
             <p><strong>Email : </strong>{specificUser.email}</p>
-            <p><strong>College : </strong>{specificUser.college}</p>
-            <p><strong>PassedOut : </strong>{specificUser.passedOut}</p>
+            <p><strong>User Name : </strong>{specificUser.username}</p>
+            <p><strong>Website : </strong>{specificUser.website}</p>
         </div>
       </div>
 

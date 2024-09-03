@@ -1,25 +1,29 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './AllUserDisplay.css'
-import { Table, Button } from 'react-bootstrap';
+import { Table, Button } from 'reactstrap';
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux"
-import { selectUsers } from '../../slice/userSlice.jsx';
+import { useSelector , useDispatch } from "react-redux"
+import { getUsers } from '../../slice/userSlice.jsx';
 
 const AllUserDisplay = () => {
-
-  const users = useSelector(selectUsers)
+  const dispatch = useDispatch();
+  const {usersArray, loading} = useSelector((state) => state.usersInfo)
 
   const navigate = useNavigate()
   const navigateToUserDetails = (userId) =>{
     navigate(`/user/${userId}`);
   }
   
+  useEffect(() => {
+    dispatch(getUsers())
+  }, []);
+  
   return (
     <>
         <div className='parent'>
           <h1>All User Display</h1>
-
+          
           <div className='user-table'>
             <Table striped>
                 <thead>
@@ -30,7 +34,7 @@ const AllUserDisplay = () => {
                   </tr>
                 </thead>
                 <tbody>
-                    {users.map((eachUser) => (
+                    {usersArray.map((eachUser) => (
                       <tr key={eachUser.id}>
                         <td>{eachUser.id}</td>
                         <td>{eachUser.name}</td>
