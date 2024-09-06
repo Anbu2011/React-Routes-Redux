@@ -39,3 +39,17 @@ h1{
 .details-button:active{
     opacity: 0.7;
 }
+
+.form-inputs{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.input-label Input{
+    border: 2px solid black;
+    outline: none;
+}
+.input-label Label{
+    font-weight: 600;
+}
