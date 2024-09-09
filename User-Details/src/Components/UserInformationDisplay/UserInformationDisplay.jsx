@@ -16,7 +16,7 @@ const UserInformationDisplay = () => {
   },[dispatch,usersArray]);
 
   if(loading){
-    return <p>Loading...</p>
+    return <p className='loading'>Loading...</p>
   }
 
   const {userId} = useParams();

@@ -37,3 +37,9 @@ a {
 a:hover {
     color: black;
 }
+
+.loading{
+    display: flex;
+    justify-content: center;
+    padding-top: 100px;
+}
