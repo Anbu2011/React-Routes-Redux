@@ -97,6 +97,7 @@ h1{
     display: flex;
     width: 500px;
     border: 1px solid black;
+    margin: 25px;
 }
 .table{
     margin: 0;

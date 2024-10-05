@@ -15,10 +15,6 @@ const UserInformationDisplay = () => {
     }
   },[dispatch,usersArray]);
 
-  if(loading){
-    return <p className='loading'>Loading...</p>
-  }
-
   const {userId} = useParams();
   const specificUser = usersArray.find((eachUser)=>{
     if(eachUser.id === Number(userId)){
@@ -26,7 +22,9 @@ const UserInformationDisplay = () => {
     }
   })
 
-  if (!specificUser) {
+  if(loading){
+    return <p className='loading'>Loading...</p>
+  } else if (!specificUser) {
     return <ErrorRoute />; 
   }
   

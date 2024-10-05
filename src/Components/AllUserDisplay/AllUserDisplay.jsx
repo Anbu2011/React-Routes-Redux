@@ -6,14 +6,12 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import { faArrowsRotate} from '@fortawesome/free-solid-svg-icons';
 import { faSearchengin} from '@fortawesome/free-brands-svg-icons';
 
-
 import { Table, Button,  Form, FormGroup, Input, Label} from 'reactstrap';
 import { useNavigate } from "react-router-dom";
 import { useSelector , useDispatch } from "react-redux"
 import { addNewUser, getUsers } from '../../slice/userSlice.jsx';
 
 const AllUserDisplay = () => {
-  const [isFormVisible, SetIsFormVisible] = useState(false)
   
   const dispatch = useDispatch();
   const {usersArray, loading} = useSelector((state) => state.usersInfo)
@@ -27,15 +25,15 @@ const AllUserDisplay = () => {
   //Calling Api
   useEffect(() => {
     dispatch(getUsers())
-  }, []);
+  }, [dispatch]);
 
   //New User
+  const [isFormVisible, SetIsFormVisible] = useState(false)
   const handleAddNewUserClick = () =>{
     SetIsFormVisible(true)
   }
 
   const [formInput, setFormInput] = useState({
-    id: '',
     name: '',
     email: '',
     username: '',
@@ -43,18 +41,41 @@ const AllUserDisplay = () => {
   })
   const handleInputChange = (event) =>{
     const {name, value} = event.target
-    setFormInput(prevData => ({...prevData, [name]: name==='id' ? Number(value) : value}))
-  }
-  const handleSubmitNewUser = () =>{
-    dispatch(addNewUser(formInput))
+    setFormInput(prevData => ({...prevData, [name]:value}))
   }
 
+  // handle Submit New User
+  const handleSubmitNewUser = (event) =>{
+
+    if(!formInput.name || !formInput.email || !formInput.username || !formInput.website){
+      alert("All fields are required")
+      event.preventDefault()
+      return
+    }
+
+    const newId = usersArray.length > 0 ? usersArray.length + 1 : 1
+    const newUser = {
+      ...formInput,
+      id: newId,
+    }
+    dispatch(addNewUser(newUser))
+
+    setFormInput({
+      name: '',
+      email: '',
+      username: '',
+      website: ''
+    })
+  }
+
+  //Form close handle button
   const handleFormCloseButton = () =>{
     SetIsFormVisible(false)
   }
 
   //Refresh
   const handleRefresh = () =>{
+    SetIsFormVisible(false)
     dispatch(getUsers());
   }
 
@@ -72,6 +93,11 @@ const AllUserDisplay = () => {
       setFoundedUser(filteredUsers)
     }
   }, [search,usersArray]);
+
+  //Loading
+  if(loading){
+    return <p className='loading'>Loading...</p>
+  }
 
   return (
     <>
@@ -100,24 +126,20 @@ const AllUserDisplay = () => {
               <button className='form-close-button' onClick={handleFormCloseButton}>X</button>
               <div className='form-inputs'>
                 <FormGroup className='input-label'>
-                  <Label for="exampleId">Id</Label>
-                  <Input id="exampleId" name="id" onChange={handleInputChange} placeholder="Enter Your Id" type="number" />
-                </FormGroup>
-                <FormGroup className='input-label'>
                   <Label for="exampleName">Name</Label>
-                  <Input id="exampleName" name="name" onChange={handleInputChange} placeholder="Enter Your Name" type="name" />
+                  <Input id="exampleName" name="name" value={formInput.name} onChange={handleInputChange} placeholder="Enter Your Name" type="name" />
                 </FormGroup>
                 <FormGroup className='input-label'>
                   <Label for="exampleEmail">Email</Label>
-                  <Input id="exampleEmail" name="email" onChange={handleInputChange} placeholder="Enter Your Email" type="email" />
+                  <Input id="exampleEmail" name="email" value={formInput.email} onChange={handleInputChange} placeholder="Enter Your Email" type="email" />
                 </FormGroup>
                 <FormGroup className='input-label'>
                   <Label for="exampleUserName">User Name</Label>
-                  <Input id="exampleUserName" name="username" onChange={handleInputChange} placeholder="Enter Your User Name" type="text" />
+                  <Input id="exampleUserName" name="username" value={formInput.username} onChange={handleInputChange} placeholder="Enter Your User Name" type="text" />
                 </FormGroup>
                 <FormGroup className='input-label'>
                   <Label for="exampleWebsite">Website</Label>
-                  <Input id="exampleWebsite" name="website" onChange={handleInputChange} placeholder="Enter Your Website" type="text" />
+                  <Input id="exampleWebsite" name="website" value={formInput.website} onChange={handleInputChange} placeholder="Enter Your Website" type="text" />
                 </FormGroup>
               </div>
 
@@ -139,23 +161,16 @@ const AllUserDisplay = () => {
                 </tr>
               </thead>
               <tbody>
-                {search ? 
-                  (foundedUser.map((eachUser) => (
-                    <tr>
+                {(search ? foundedUser : usersArray).length > 0 ?
+                  (search ? foundedUser : usersArray).map((eachUser) => (
+                    <tr key={eachUser.id}>
                       <td>{eachUser.id}</td>
                       <td>{eachUser.name}</td>
                       <td><Button className='details-button' onClick={() => navigateToUserDetails(eachUser.id)}>Show Details</Button></td>
                     </tr>
-                  )))
-                  :
-                  (usersArray.map((eachUser) => (
-                      <tr key={eachUser.id}>
-                        <td>{eachUser.id}</td>
-                        <td>{eachUser.name}</td>
-                        <td><Button className='details-button' onClick={() => navigateToUserDetails(eachUser.id)}>Show Details</Button></td>
-                      </tr>
-                    ))
-                  )
+                  )) 
+                  : 
+                  (<tr><td colSpan="3">No Users Found!!</td></tr>)
                 }
               </tbody>
           </Table>
